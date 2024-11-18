@@ -1,6 +1,8 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 import Head from "next/head";
+import localFont from "next/font/local";
+import { Metadata } from "next";
 import "./globals.css";
 
 const sofiaProSoft = localFont({
@@ -30,13 +32,16 @@ export const metadata: Metadata = {
   description: "Useful tips and tricks for your furry friends.",
 };
 
-export default function RootLayout({
+export default async function LocaleLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en">
+    <html lang={locale}>
       <Head>
         <link
           rel="icon"
@@ -53,7 +58,11 @@ export default function RootLayout({
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <body className={`${sofiaProSoft.variable}`}>{children}</body>
+      <body className={`${sofiaProSoft.variable}`}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
+          {children}
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }

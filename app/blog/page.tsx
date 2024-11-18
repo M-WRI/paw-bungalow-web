@@ -1,7 +1,8 @@
 import { client } from "@/lib/sanityClient";
+import { getLocale } from "next-intl/server";
 import { Image } from "next-sanity/image";
 
-const query = `*[_type == "blogPost"]{
+const query = `*[_type == "blogPost" && language == $locale]{
   _id,
   "categories": categories[]->title,
   title,
@@ -14,7 +15,8 @@ const query = `*[_type == "blogPost"]{
 }`;
 
 const Blog = async () => {
-  const blogPosts = await client.fetch(query);
+  const locale = await getLocale();
+  const blogPosts = await client.fetch(query, { locale });
 
   return (
     <main className="h-screen w-screen flex flex-col items-center justify-center relative font-primary bg-secondary">
