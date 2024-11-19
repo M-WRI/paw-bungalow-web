@@ -4,10 +4,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 const withNextIntl = createNextIntlPlugin();
 
 const nextConfig: NextConfig = {
-  // i18n: {
-  //   locales: ["en", "es", "de"],
-  //   defaultLocale: "en",
-  // },
+  i18n: {
+    locales: ["en", "es", "de"],
+    defaultLocale: "en",
+  },
   async redirects() {
     return [
       {
