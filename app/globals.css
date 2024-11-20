@@ -5,3 +5,32 @@
 * {
   @apply m-0 p-0;
 }
+
+html,
+body {
+  @apply text-base;
+}
+
+h1 {
+  @apply text-5xl font-bold font-primary;
+}
+
+h2 {
+  @apply text-4xl font-bold font-primary;
+}
+
+h3 {
+  @apply text-3xl font-bold font-primary;
+}
+
+h4 {
+  @apply text-2xl font-bold font-primary;
+}
+
+h5 {
+  @apply text-xl font-bold font-primary;
+}
+
+h6 {
+  @apply text-base font-bold font-primary;
+}

@@ -1,11 +1,13 @@
+import { BlogPost, BlogPostCard } from "@/components/blogPostCard";
 import { client } from "@/lib/sanityClient";
 import { getLocale } from "next-intl/server";
-import { Image } from "next-sanity/image";
 
 const query = `*[_type == "blogPost" && language == $locale]{
   _id,
   "categories": categories[]->title,
   title,
+  _createdAt,
+  previewText,
   mainImage {
     asset-> {
       url
@@ -16,30 +18,18 @@ const query = `*[_type == "blogPost" && language == $locale]{
 
 const Blog = async () => {
   const locale = await getLocale();
-  const blogPosts = await client.fetch(query, { locale });
+  const blogPosts: BlogPost[] = await client.fetch(query, { locale });
 
   return (
-    <main className="h-screen w-screen flex flex-col items-center justify-center relative font-primary bg-secondary">
-      <div className="grid gap-4">
-        <h1 className="font-medium text-primary text-5xl text-center">Blog</h1>
-        {Array.isArray(blogPosts) && blogPosts.length > 0 ? (
-          blogPosts.map((post: any) => (
-            <div key={post._id} className="p-4 border rounded">
-              <h2 className="text-2xl">{post.title}</h2>
-              <p>{post.language}</p>
-              <Image
-                src={post.mainImage.asset.url}
-                alt={post.title}
-                width={100}
-                height={100}
-              />
-              <div>{post.categories.join(", ")}</div>
-            </div>
-          ))
-        ) : (
-          <p>No blog posts found.</p>
-        )}
-      </div>
+    <main className="grid grid-cols-[1fr_2fr] gap-4">
+      <aside className="bg-lime-100 h-screen sticky top-0">
+        <h1>this will be the aside</h1>
+      </aside>
+      <section className="grid grid-cols-2 gap-4 auto-rows-min">
+        {blogPosts.map((postCard: BlogPost) => {
+          return <BlogPostCard postCard={postCard} />;
+        })}
+      </section>
     </main>
   );
 };
