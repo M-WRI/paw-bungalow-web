@@ -16,9 +16,19 @@ export interface BlogPost {
   previewText: string;
 }
 
-export const BlogPostCard = ({ postCard }: { postCard: BlogPost }) => {
+export const BlogPostCard = ({
+  postCard,
+  i,
+}: {
+  postCard: BlogPost;
+  i?: number;
+}) => {
   return (
-    <div className="overflow-hidden grid gap-2 rounded-xl cursor-pointer">
+    <div
+      className={`${
+        i === 0 ? "col-span-2" : ""
+      } overflow-hidden grid gap-2 rounded-xl cursor-pointer`}
+    >
       <Image src={postCard.mainImage.asset.url} alt={postCard.title} />
       <CategoriesAndDate
         date={postCard._createdAt}

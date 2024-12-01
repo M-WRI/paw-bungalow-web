@@ -1,35 +1,39 @@
-import { BlogPost, BlogPostCard } from "@/components/blogPostCard";
+import { BlogPostList } from "@/components/blogPostList";
 import { client } from "@/lib/sanityClient";
 import { getLocale } from "next-intl/server";
 
-const query = `*[_type == "blogPost" && language == $locale]{
-  _id,
-  "categories": categories[]->title,
-  title,
-  _createdAt,
-  previewText,
-  mainImage {
-    asset-> {
-      url
-    }
-  },
-  language
+export interface Category {
+  language: string;
+  title: string;
+}
+
+const query = `*[_type == "category" && language == $locale] {
+  language,
+  title
 }`;
 
 const Blog = async () => {
   const locale = await getLocale();
-  const blogPosts: BlogPost[] = await client.fetch(query, { locale });
+  const categories: Category[] = await client.fetch(query, { locale });
 
   return (
-    <main className="grid grid-cols-[1fr_2fr] gap-4">
-      <aside className="bg-lime-100 h-screen sticky top-0">
-        <h1>this will be the aside</h1>
+    <main className="grid grid-cols-[1fr_2fr] gap-4 px-4 py-4">
+      <aside className="h-screen sticky top-0">
+        <div className="w-full border-gray-100 border-t-2 pt-4 grid gap-4">
+          <p className="text-xl text-center">Categories</p>
+          <ul>
+            {categories.map((category: Category) => (
+              <li
+                key={category.title}
+                className="hover:bg-gray-100 transition-all duration-300 ease-in-out py-2 px-4 cursor-pointer rounded-lg"
+              >
+                {category.title}
+              </li>
+            ))}
+          </ul>
+        </div>
       </aside>
-      <section className="grid grid-cols-2 gap-4 auto-rows-min">
-        {blogPosts.map((postCard: BlogPost) => {
-          return <BlogPostCard postCard={postCard} />;
-        })}
-      </section>
+      <BlogPostList />
     </main>
   );
 };

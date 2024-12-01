@@ -5,12 +5,12 @@ export const CategoriesAndDate = ({
   categories,
 }: {
   date: Date;
-  categories: string[];
+  categories?: string[];
 }) => {
   return (
     <div>
       <p className="text-sm">
-        {`${categories.join(", ")} - ${formattedDate({ date })}`}
+        {`${categories?.join(", ")} - ${formattedDate({ date })}`}
       </p>
     </div>
   );
